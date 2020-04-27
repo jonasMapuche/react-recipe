@@ -1,0 +1,33 @@
+[ 
+    {
+        "id": 1, 
+        "name": "Cloreto de Sódio",
+        "weight": 58.5,
+        "prefix": "não identificado", 
+        "suffix": "não identificado",
+        "roles": [
+            {
+                "id": 1,
+                "name": "Na",
+                "multiplier": 1,
+                "valence": 10,
+                "charge": 1,
+                "amount": 1,
+                "restValence": 0,
+                "totalValence": 18,
+                "state": "solid"
+            },
+            {
+                "id": 2,
+                "name": "Cl",
+                "multiplier": 1,
+                "valence": 18,
+                "charge": -1,
+                "amount": 1,
+                "restValence": 8,
+                "totalValence": 18,
+                "state": "gaseous"
+            }
+        ]
+    }
+  ]

@@ -70,7 +70,7 @@ function name(val) {
   };
   
   if (eSaltDoubleCation() == true) {
-    return 'Sal Dublo Cátion: ' + nameSaltDoubleCation(val);
+    return nameSaltDoubleCation(val); //'Sal Dublo Cátion: ' + nameSaltDoubleCation(val);
   };
 
   if (eSaltDoubleAnion() == true) {
@@ -133,10 +133,12 @@ function nameSaltBase (val)
 function nameSaltDoubleCation (val)
 {
   const nameAnion = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '');
-  const nameCation1 = val.filter(v => v.type == 'ion' && v.charge > 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName)[0]).reduce((pre, pos) => pre + pos, '');
-  const nameCation2 = val.filter(v => v.type == 'ion' && v.charge > 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName)[1]).reduce((pre, pos) => pre + pos, '');
-  const chargeCation = val.filter(v => v.type == 'ion' && v.charge > 0).map(v => v.charge).reduce((pre, pos) => pre + pos, 0);
-  return suffixSalt(chargeCation, nameAnion) + ' de ' + nameCation1 + ' e ' + nameCation2;
+  const nameCation1 = val.filter(v => v.type == 'ion' && v.charge > 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName))[0].reduce((pre, pos) => pre + pos, '');
+  const nameCation2 = val.filter(v => v.type == 'ion' && v.charge > 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName))[1].reduce((pre, pos) => pre + pos, '');
+  const chargeAnion = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.charge).reduce((pre, pos) => pre + pos, 0);
+  const amoutAnion = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').length).reduce((pre, pos) => pre + pos, 0);
+
+  return suffixSalt(chargeAnion, amoutAnion, nameAnion.replace(',', '-')) + ' de ' + nameCation1 + ' e ' + nameCation2;
 }
 
 function nameSaltDoubleAnion (val)

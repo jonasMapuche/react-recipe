@@ -62,7 +62,7 @@ function name(val) {
   }
 
   if (eSaltAcid() == true) { 
-    return nameSaltAcid(val); //'Sal Ácido: ' + nameSaltAcid(val);
+    return 'Sal Ácido: ' + nameSaltAcid(val);
   };
 
   if (eSaltBase() == true) {
@@ -125,9 +125,9 @@ function nameSaltBase (val)
 {
   const nameAnion = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default' && v.name != 'O' && v.name != 'H').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '');
   const nameCation = val.filter(v => v.type == 'ion' && v.charge > 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '');
-  const chargeAnion = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.charge).reduce((pre, pos) => pre + pos, 0);
+  const chargeAnion = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default' && v.name != 'O' && v.name != 'H').map(v => v.charge).reduce((pre, pos) => pre + pos, 0)).reduce((pre, pos) => pre + pos, 0);
   const amoutAnion = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default' && v.name != 'O' && v.name != 'H').length).reduce((pre, pos) => pre + pos, 0);
-  return 'hidroxi' + suffixSalt(chargeCation, nameAnion) + ' de ' + nameCation;
+  return 'hidroxi-' + suffixSalt(chargeAnion, amoutAnion, nameAnion) + ' de ' + nameCation;
 }
 
 function nameSaltDoubleCation (val)

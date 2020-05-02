@@ -53,7 +53,6 @@ function name(val) {
 
   const oxide = val.filter(v => v.type == 'ion' && v.charge != 0).map(v => v.role.filter(v => v.type == 'default' && v.name == 'O').length).reduce((pre, pos) => pre + pos, 0);
   const amount = val.map(v => v.role.length).reduce((pre, pos) => pre + pos, 0);
-  //const electrically = measure(val.map(v => v.role.filter(v => v.type == 'default' && v.name != 'O').map(v => v.name)).reduce((pre, pos) => pre + pos, ''));
   const rating = val.filter(v => v.type == 'ion' && v.charge != 0).map(v => v.role.filter(v => v.type == 'default' && v.name != 'O').map(v => v.rating)).reduce((pre, pos) => pre + pos, '');
   const eOxideMetal = () => {if (oxide == 1 && amount == 2 && rating == 'metal') {return true}};
   const eOxideNotMetal = () => {if (oxide == 1 && amount == 2 && rating != 'metal') {return true}};
@@ -64,6 +63,10 @@ function name(val) {
 
   if (eOxideMetal() == true) {
     return 'Óxido: ' + nameOxideMetal(val);
+  }
+
+  if (eOxideNotMetal() == true) {
+    return 'Óxido: ' + nameOxideNotMetal(val);
   }
 
   if (eSaltAcid() == true) { 
@@ -252,3 +255,33 @@ function nameOxideMetal (val)
   const charge = val.filter(v => v.type == 'ion').map(v => v.role.filter(v => v.type == 'default' && v.name == 'O').map(v => v.charge).reduce((pre, pos) => pre + pos, 0)).reduce((pre, pos) => pre + pos, 0);
   return 'óxido de ' + name + ' ' + charge;
 }
+
+function nameOxideNotMetal (val)
+{
+  const nameNotO = val.filter(v => v.type == 'ion').map(v => v.role.filter(v => v.type == 'default' && v.name != 'O').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '');
+  const amountNotO = val.filter(v => v.type == 'ion').map(v => v.role.filter(v => v.type == 'default' && v.name != 'O').map(v => v.amount).reduce((pre, pos) => pre + pos, 0)).reduce((pre, pos) => pre + pos, 0);
+  const amountO = val.filter(v => v.type == 'ion').map(v => v.role.filter(v => v.type == 'default' && v.name == 'O').map(v => v.amount).reduce((pre, pos) => pre + pos, 0)).reduce((pre, pos) => pre + pos, 0);
+  return prefixOxide(amountO, 'óxido') + ' de ' + prefixOxide(amountNotO, nameNotO);
+}
+
+function prefixOxide(amount, name) {
+  switch (amount) {
+    case 1:
+      return 'mono-' + name;
+    case 2:
+      return 'di-' + name;
+    case 3:
+      return 'tri-' + name;
+    case 4:
+      return 'quadri-' + name;
+    case 5:
+      return 'penta-' + name;
+    case 6:
+        return 'hexa-' + name;
+    case 7:
+        return 'epi-' + name;
+    default:
+      return 'x-' + name;
+  }
+}
+

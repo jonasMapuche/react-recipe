@@ -53,15 +53,17 @@ function name(val) {
 
   const oxide = val.filter(v => v.type == 'ion' && v.charge != 0).map(v => v.role.filter(v => v.type == 'default' && v.name == 'O').length).reduce((pre, pos) => pre + pos, 0);
   const amount = val.map(v => v.role.length).reduce((pre, pos) => pre + pos, 0);
-  const electrically = measure(val.map(v => v.role.filter(v => v.type == 'default' && v.name != 'O').map(v => v.name)).reduce((pre, pos) => pre + pos, ''));
-  const eOxide = () => {if (oxide == 1 && amount == 2 && electrically < 9) {return true}};
+  //const electrically = measure(val.map(v => v.role.filter(v => v.type == 'default' && v.name != 'O').map(v => v.name)).reduce((pre, pos) => pre + pos, ''));
+  const rating = val.filter(v => v.type == 'ion' && v.charge != 0).map(v => v.role.filter(v => v.type == 'default' && v.name != 'O').map(v => v.rating)).reduce((pre, pos) => pre + pos, '');
+  const eOxideMetal = () => {if (oxide == 1 && amount == 2 && rating == 'metal') {return true}};
+  const eOxideNotMetal = () => {if (oxide == 1 && amount == 2 && rating != 'metal') {return true}};
 
   //return eOxide();
 
   // names
 
-  if (eOxide() == true) {
-    return 'Óxido'; // nameOxide(val);
+  if (eOxideMetal() == true) {
+    return 'Óxido: ' + nameOxideMetal(val);
   }
 
   if (eSaltAcid() == true) { 
@@ -242,4 +244,11 @@ function suffixAcid (amountO, amountH, name) {
   else if ((amountO == 2 && amountH == 1) || (amountO == 3 && amountH > 1)) return name + '-oso'
   else if ((amountO == 3 && amountH == 1) || (amountO == 4 && amountH > 1)) return name + '-ico'
   else return 'per-' + name + '-ico';
+}
+
+function nameOxideMetal (val)
+{
+  const name = val.filter(v => v.type == 'ion').map(v => v.role.filter(v => v.type == 'default' && v.name != 'O').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '');
+  const charge = val.filter(v => v.type == 'ion').map(v => v.role.filter(v => v.type == 'default' && v.name == 'O').map(v => v.charge).reduce((pre, pos) => pre + pos, 0)).reduce((pre, pos) => pre + pos, 0);
+  return 'óxido de ' + name + ' ' + charge;
 }

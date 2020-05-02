@@ -97,7 +97,7 @@ function name(val) {
   };
 
   if (eOxyacid() == true) {
-    return 'Óxido: ' + nameOxyacid(val);
+    return 'Ácido: ' + nameOxyacid(val);
   };
 
 }
@@ -231,8 +231,10 @@ function nameHydracid (val)
 
 function nameOxyacid (val)
 {
-  const nameAnion = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '').replace(',','-');
-  return 'ácido ' + nameAnion + '-ídrico';
+  const nameAnion = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default' && v.name != 'O').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '');
+  const amoutAnionO = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default' && v.name == 'O').map(v => v.amount).reduce((pre, pos) => pre + pos, 0)).reduce((pre, pos) => pre + pos, 0);
+  const amoutAnionH = val.filter(v => v.type == 'ion' && v.charge > 0).map(v => v.role.filter(v => v.type == 'default' && v.name == 'H').map(v => v.amount).reduce((pre, pos) => pre + pos, 0)).reduce((pre, pos) => pre + pos, 0);
+  return 'ácido ' + suffixAcid(amoutAnionO, amoutAnionH, nameAnion);
 }
 
 function suffixAcid (amountO, amountH, name) { 

@@ -167,31 +167,12 @@ function nameSaltDoubleAnion (val)
   return suffixSalt(chargeAnion1, amoutAnion1, nameAnion1) + ' ' + suffixSalt(chargeAnion2, amoutAnion2, nameAnion2) + ' de ' + nameCation;
 }
 
-function prefixSaltHydrated(val) {
-  switch (val) {
-    case 1:
-      return 'mono-hidratado';
-    case 2:
-      return 'di-hidratado';
-    case 3:
-      return 'tri-hidratado';
-    case 4:
-      return 'quadri-hidratado';
-    case 5:
-      return 'penta-hidratado';
-    case 5:
-        return 'hexa-hidratado';
-    default:
-      return 'x-hidratado';
-  }
-}
-
 function nameSaltHydrated (val)
 {
   const nameAnion = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '').replace(',', '-');
   const nameCation = val.filter(v => v.type == 'ion' && v.charge > 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '').replace(',', '-');
   const numberWater = val.filter(v => v.type == 'mol').map(v => v.multiplier).reduce((pre, pos) => pre + pos, 0);
-  return nameAnion + ' de ' + nameCation + ' ' + prefixSaltHydrated(numberWater);
+  return nameAnion + ' de ' + nameCation + ' ' + prefixMultiplier(numberWater, 'hidratado');
 }
 
 function measure(val) {
@@ -261,10 +242,10 @@ function nameOxideNotMetal (val)
   const nameNotO = val.filter(v => v.type == 'ion').map(v => v.role.filter(v => v.type == 'default' && v.name != 'O').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '');
   const amountNotO = val.filter(v => v.type == 'ion').map(v => v.role.filter(v => v.type == 'default' && v.name != 'O').map(v => v.amount).reduce((pre, pos) => pre + pos, 0)).reduce((pre, pos) => pre + pos, 0);
   const amountO = val.filter(v => v.type == 'ion').map(v => v.role.filter(v => v.type == 'default' && v.name == 'O').map(v => v.amount).reduce((pre, pos) => pre + pos, 0)).reduce((pre, pos) => pre + pos, 0);
-  return prefixOxide(amountO, 'óxido') + ' de ' + prefixOxide(amountNotO, nameNotO);
+  return prefixOxide(amountO, 'óxido') + ' de ' + prefixMultiplier(amountNotO, nameNotO);
 } 
 
-function prefixOxide(amount, name) {
+function prefixMultiplier(amount, name) {
   switch (amount) {
     case 1:
       return 'mono-' + name;

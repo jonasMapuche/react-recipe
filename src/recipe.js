@@ -262,7 +262,7 @@ function nameOxideNotMetal (val)
   const amountNotO = val.filter(v => v.type == 'ion').map(v => v.role.filter(v => v.type == 'default' && v.name != 'O').map(v => v.amount).reduce((pre, pos) => pre + pos, 0)).reduce((pre, pos) => pre + pos, 0);
   const amountO = val.filter(v => v.type == 'ion').map(v => v.role.filter(v => v.type == 'default' && v.name == 'O').map(v => v.amount).reduce((pre, pos) => pre + pos, 0)).reduce((pre, pos) => pre + pos, 0);
   return prefixOxide(amountO, 'óxido') + ' de ' + prefixOxide(amountNotO, nameNotO);
-}
+} 
 
 function prefixOxide(amount, name) {
   switch (amount) {

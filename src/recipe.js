@@ -17,7 +17,10 @@ function name(val) {
   // acid - ok
 
   const acidRaiz = val.filter(v => v.type == 'ion' && v.charge > 0).map(v => v.role.filter(v => v.type == 'default' && v.name == 'H').length).reduce((pre, pos) => pre + pos, 0);
+  const acidRaizWithO = val.filter(v => v.type == 'ion').map(v => v.role.filter(v => v.type == 'default' && v.name == 'O').length).reduce((pre, pos) => pre + pos, 0);
   const eAcid = () => {if (acidRaiz > 0) {return true}};
+  const eHydracid = () => {if (eAcid() == true && acidRaizWithO == 0) {return true}};
+  const eOxyacid = () => {if (eAcid() == true && acidRaizWithO > 0) {return true}}; 
   
   // base
 
@@ -86,11 +89,15 @@ function name(val) {
   };
   
   if (eBase() == true) {
-    return 'Base'; //nameBase(val);
+    return 'Base: ' + nameBase(val);
   }
 
-  if (eAcid() == true) {
-    return 'Ácido'; //nameAcid(val);
+  if (eHydracid() == true) {
+    return 'Ácido: ' + nameHydracid(val);
+  };
+
+  if (eOxyacid() == true) {
+    return 'Óxido: ' + nameOxyacid(val);
   };
 
 }
@@ -146,7 +153,8 @@ function nameSaltDoubleAnion (val)
   const nameAnion1 = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName))[0].reduce((pre, pos) => pre + pos, '');
   const chargeAnion1 = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.charge)[0];
   const amoutAnion1 = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').length)[0];;
-  const nameAnion2 = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName))[1].reduce((pre, pos) => pre + (pos + '-'), '').substr(0, val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName))[1].reduce((pre, pos) => pre + pos, 0).length);
+  const lengthNameAnion2 = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName))[1].reduce((pre, pos) => pre + pos, 0).length;
+  const nameAnion2 = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName))[1].reduce((pre, pos) => pre + (pos + '-'), '').substr(0, lengthNameAnion2);
   const chargeAnion2 = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.charge)[1];
   const amoutAnion2 = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').length)[1];
   const nameCation = val.filter(v => v.type == 'ion' && v.charge > 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '');
@@ -206,4 +214,30 @@ function measure(val) {
     default:
       return 11;
   }
+}
+
+function nameBase (val)
+{
+  const nameCation = val.filter(v => v.type == 'ion' && v.charge > 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '');
+  const chargeAnion = val.filter(v => v.type == 'ion' && v.charge > 0).map(v => v.charge).reduce((pre, pos) => pre + pos, 0);
+  return 'hidróxido de ' + nameCation + ' ' + chargeAnion;
+}
+
+function nameHydracid (val)
+{
+  const nameAnion = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '').replace(',','-');
+  return 'ácido ' + nameAnion + '-ídrico';
+}
+
+function nameOxyacid (val)
+{
+  const nameAnion = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '').replace(',','-');
+  return 'ácido ' + nameAnion + '-ídrico';
+}
+
+function suffixAcid (amountO, amountH, name) { 
+  if ((amountO == 1 && amountH == 1) || (amountO == 2 && amountH > 1)) return 'hipo-' + name + '-oso'
+  else if ((amountO == 2 && amountH == 1) || (amountO == 3 && amountH > 1)) return name + '-oso'
+  else if ((amountO == 3 && amountH == 1) || (amountO == 4 && amountH > 1)) return name + '-ico'
+  else return 'per-' + name + '-ico';
 }

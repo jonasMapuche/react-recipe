@@ -70,7 +70,7 @@ function name(val) {
   };
   
   if (eSaltDoubleCation() == true) {
-    return nameSaltDoubleCation(val); //'Sal Dublo Cátion: ' + nameSaltDoubleCation(val);
+    return 'Sal Dublo Cátion: ' + nameSaltDoubleCation(val);
   };
 
   if (eSaltDoubleAnion() == true) {
@@ -143,13 +143,15 @@ function nameSaltDoubleCation (val)
 
 function nameSaltDoubleAnion (val)
 {
-  const nameAnion1 = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName)[0]).reduce((pre, pos) => pre + pos, '');
-  const chargeCation1 = val.filter(v => v.type == 'ion' && v.charge > 0)[0].map(v => v.charge).reduce((pre, pos) => pre + pos, 0);
-  const nameAnion2 = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName)[1]).reduce((pre, pos) => pre + pos, '');
-  const chargeCation2 = val.filter(v => v.type == 'ion' && v.charge > 0)[1].map(v => v.charge).reduce((pre, pos) => pre + pos, 0);
+  const nameAnion1 = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName))[0].reduce((pre, pos) => pre + pos, '');
+  const chargeAnion1 = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.charge)[0];
+  const amoutAnion1 = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').length)[0];;
+  const nameAnion2 = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName))[1].reduce((pre, pos) => pre + (pos + '-'), '').substr(0, val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName))[1].reduce((pre, pos) => pre + pos, 0).length);
+  const chargeAnion2 = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.charge)[1];
+  const amoutAnion2 = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').length)[1];
   const nameCation = val.filter(v => v.type == 'ion' && v.charge > 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '');
 
-  return suffixSalt(chargeCation1, nameAnion1) + ' ' + suffixSalt(chargeCation2, nameAnion2) + ' de ' + nameCation;
+  return suffixSalt(chargeAnion1, amoutAnion1, nameAnion1) + ' ' + suffixSalt(chargeAnion2, amoutAnion2, nameAnion2) + ' de ' + nameCation;
 }
 
 function prefixSaltHydrated(val) {
@@ -173,8 +175,8 @@ function prefixSaltHydrated(val) {
 
 function nameSaltHydrated (val)
 {
-  const nameAnion = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '');
-  const nameCation = val.filter(v => v.type == 'ion' && v.charge > 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '');
+  const nameAnion = val.filter(v => v.type == 'ion' && v.charge < 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '').replace(',', '-');
+  const nameCation = val.filter(v => v.type == 'ion' && v.charge > 0).map(v => v.role.filter(v => v.type == 'default').map(v => v.fullName)).reduce((pre, pos) => pre + pos, '').replace(',', '-');
   const numberWater = val.filter(v => v.type == 'mol').map(v => v.multiplier).reduce((pre, pos) => pre + pos, 0);
   return nameAnion + ' de ' + nameCation + ' ' + prefixSaltHydrated(numberWater);
 }

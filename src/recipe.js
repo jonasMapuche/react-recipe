@@ -5,12 +5,17 @@ module.exports = {
       res.send({ recipe: name(req.body)});
     },
   weight:function (req, res) {
-      res.send({ express: nome});
+      res.send({ weigth: weight(req.body)});
     },
   equation:function (req, res) {
       res.send({ express: nome});
   }
 };
+
+function weight(val) {
+  const bulkMin = val.filter(v => v.type == 'ion').map(v => v.role.filter(v => v.type == 'default').map(v => v.bulk)); 
+  return bulkMin;
+}
 
 function name(val) {
 

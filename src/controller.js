@@ -9,8 +9,6 @@ module.exports = {
     all:function (req, res) {
         res.send({ express: req.body.express});
       },
-    data:function (req, res) {
-        res.send({ express: nome});
-      },
+    weigth:(recipe.weight),
     name:(recipe.name)
 };

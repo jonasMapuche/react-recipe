@@ -4,12 +4,12 @@ const controllers = require('./controller.js');
 
 Task.route('/')
   .post(controllers.name)
-  .get(controllers.data)
+  .get(controllers.weigth)
   .put((req, res) => {
     res.send({ express: 'put'});
   })
   .delete((req, res) => {
     res.send({ express: 'delete'});
   });
-
+  
 module.exports = Task;

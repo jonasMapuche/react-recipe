@@ -13,8 +13,10 @@ module.exports = {
 };
 
 function weight(val) {
-  const bulkMin = val.filter(v => v.type == 'ion').map(v => v.role.filter(v => v.type == 'default').map(v => v.bulk)); 
-  return bulkMin;
+  const bulk = val.filter(v => v.type == 'ion').map(v => v.role.filter(v => v.type == 'default').map(function (v) { return {name: v.fullName, bulk: v.bulk * v.amount * v.multiplier}} )); 
+  const mol = val.filter(v => v.type == 'ion').map(v => v.role.filter(v => v.type == 'default').map(function (v) { return Object.assign (v, {bulk: v.bulk * v.amount * v.multiplier})} )); 
+  const mol2 = val.filter(v => v.type == 'ion').map(v => v.role.filter(v => v.type == 'default').map(v => v.bulk * v.amount * v.multiplier).reduce((pre, pos) => pre + pos, 0)); 
+  return mol2;
 }
 
 function name(val) {

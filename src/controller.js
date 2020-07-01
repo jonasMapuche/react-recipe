@@ -10,5 +10,6 @@ module.exports = {
         res.send({ express: req.body.express});
       },
     weigth:(recipe.weight),
-    name:(recipe.name)
+    name:(recipe.name),
+    android:(recipe.android)
 };

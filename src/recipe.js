@@ -9,8 +9,15 @@ module.exports = {
     },
   equation:function (req, res) {
       res.send({ express: nome});
-  }
+    },
+  android:function (req, res) {
+      res.send({ android: android(req.body)});
+    }
 };
+
+function android(val) {
+  return 'teste conexao android';
+}
 
 function weight(val) {
   const bulk = val.filter(v => v.type == 'ion').map(v => v.role.filter(v => v.type == 'default').map(function (v) { return {name: v.fullName, bulk: v.bulk * v.amount * v.multiplier}} )); 

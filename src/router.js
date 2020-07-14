@@ -5,8 +5,8 @@ const controllers = require('./controller.js');
 Task.route('/')
   .post(controllers.name)
   .purge(controllers.weigth)
-  .put(controllers.android)
-  .get((req, res) => {
+  .get(controllers.android)
+  .put((req, res) => {
     res.send({ express: 'delete'});
   });
   

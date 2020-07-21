@@ -6,6 +6,7 @@ Task.route('/')
   .post(controllers.name)
   .purge(controllers.weigth)
   .get(controllers.android)
+  .delete(controllers.estimate)
   .put((req, res) => {
     res.send({ express: 'delete'});
   });

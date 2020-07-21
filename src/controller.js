@@ -11,5 +11,6 @@ module.exports = {
       },
     weigth:(recipe.weight),
     name:(recipe.name),
-    android:(recipe.android)
+    android:(recipe.android),
+    estimate:(recipe.estimate)
 };

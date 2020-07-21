@@ -1,5 +1,7 @@
 'use strict';
 
+const R = require('r-script');
+
 module.exports = {
   name:function (req, res) {
       res.send({ recipe: name(req.body)});
@@ -12,8 +14,18 @@ module.exports = {
     },
   android:function (req, res) {
       res.send({ android: android(req.body)});
+    },
+  estimate:function (req, res) {
+      res.send({ express: estimate(req.body)});
     }
 };
+
+function estimate(val) {
+  const R = require('r-script');
+  //var out = R("/home/jonas/workspace-r/teste3.R").data().callSync();
+  var out = R("/home/jonas/workspace-r/helloWorld.R").data(100, 2).callSync();
+  return 'teste linguagem r <- ' + out;
+}
 
 function android(val) {
   return 'teste conexao android';
